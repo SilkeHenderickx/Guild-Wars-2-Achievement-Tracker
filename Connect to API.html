@@ -1,0 +1,61 @@
+<html>
+<head>
+  <title>GW2 Achievement Tracker</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+</head>
+<body>
+<script>
+$(document).ready(function() {
+  var sUrl = "https://api.guildwars2.com/v2/account/achievements?access_token=5765CDB0-845C-C44C-A174-ED3E44A6A330D5903F80-0EBA-4B16-90F8-BCD9D85DFD72";
+
+
+    $.ajax({
+      headers: {
+        'Accept': 'application/json'
+      },
+      type: "GET",
+      url: sUrl,
+      success: function(oData) {
+        console.log(oData);
+        data = oData;
+        console.log("connection success");
+        loop(oData);
+      },
+      error: function(err){
+        console.log('error:' + err)
+      },
+      dataType: "json"
+    });
+
+
+//looping over the json
+function loop(data){
+
+
+    $.each(data, function(i, item) {
+        if (!data[i].done) {
+          console.log(data[i].id);
+        };
+    })
+
+}
+
+
+
+
+});
+
+</script>
+
+</body>
+</html>
