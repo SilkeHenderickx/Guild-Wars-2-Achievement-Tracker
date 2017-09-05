@@ -2,15 +2,15 @@
 <head>
   <title>GW2 Achievement Tracker</title>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-<!-- Optional theme -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 </head>
 <body>
@@ -24,12 +24,14 @@
       <button onclick="connectAPI();" class="btn btn-success">Submit</button>
     </div>
   </div>
-<script>
-function connectAPI() {
-  var sUrl = "https://api.guildwars2.com/v2/account/achievements?access_token=";
+  <script>
+  function connectAPI() {
+    var sUrl = "https://api.guildwars2.com/v2/account/achievements?access_token=";
+    var api =$("#api").val();
 
-  var api =$("#api").val();
-  sUrl = sUrl + api;
+    var url = "https://api.guildwars2.com/v2/achievements?ids=";
+
+    sUrl = sUrl + api;
     $.ajax({
       headers: {
         'Accept': 'application/json'
@@ -37,37 +39,71 @@ function connectAPI() {
       type: "GET",
       url: sUrl,
       success: function(oData) {
+
         console.log(oData);
         data = oData;
-        alert("connection success");
-        loop(oData);
+        alert("ding");
+        sortByKey(oData);
       },
       error: function(err){
         console.log('error:' + err)
       },
       dataType: "json"
     });
-}
 
-//looping over the json
-function loop(data){
+
+
+
+  //looping over the json
+  function sortByKey(data){
+    var sort_array = [];
 
 
     $.each(data, function(i, item) {
-        if (!data[i].done) {
-          console.log(data[i].id);
-        };
+      if (!data[i].done) {
+        var difference = data[i].max - data[i].current
+        var temp_array = [difference, data[i].id];
+        sort_array.push(temp_array);
+      };
     })
+    // Now sort it:
 
+    sort_array.sort(function(a,b) {
+      return a[0] - b[0];
+    });
+
+    for (i = 0; i < 9; i++) {
+    url = url + sort_array[i][1] + ",";
 }
+    url = url + sort_array[9][1];
+    console.log(sort_array.slice(0,10));
+    getNames(url);
+
+  };
+};
+function getNames(url){
+    $.ajax({
+      headers: {
+        'Accept': 'application/json'
+      },
+      type: "GET",
+      url: url,
+      success: function(data) {
+          console.log(data);
+      },
+      error: function(err){
+        console.log('error:' + err)
+      },
+      dataType: "json"
+    });
+  }
 
 
 
 
 
 
-
-</script>
+  </script>
 
 </body>
 </html>
