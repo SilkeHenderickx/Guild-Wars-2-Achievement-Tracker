@@ -14,11 +14,22 @@
 
 </head>
 <body>
+
+  <div class="form-group">
+    <label for="api">API key:</label>
+    <input type="text" class="form-control" id="api">
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button onclick="connectAPI();" class="btn btn-success">Submit</button>
+    </div>
+  </div>
 <script>
-$(document).ready(function() {
+function connectAPI() {
   var sUrl = "https://api.guildwars2.com/v2/account/achievements?access_token=";
 
-
+  var api =$("#api").val();
+  sUrl = sUrl + api;
     $.ajax({
       headers: {
         'Accept': 'application/json'
@@ -28,7 +39,7 @@ $(document).ready(function() {
       success: function(oData) {
         console.log(oData);
         data = oData;
-        console.log("connection success");
+        alert("connection success");
         loop(oData);
       },
       error: function(err){
@@ -36,7 +47,7 @@ $(document).ready(function() {
       },
       dataType: "json"
     });
-
+}
 
 //looping over the json
 function loop(data){
@@ -53,7 +64,8 @@ function loop(data){
 
 
 
-});
+
+
 
 </script>
 
