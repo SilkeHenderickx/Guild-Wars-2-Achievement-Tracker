@@ -41,12 +41,32 @@ $.ajax({
   type: "GET",
   url: fullUrl ,
   success: function(data) {
-//      historicalAchievements.push(data[0].achievements);
-    console.log(data);
+    getArrayHistoricalAchievements(data);
+
   },
   error: function(err){
     console.log('error:' + err)
   },
   dataType: "json"
 });
+}
+
+function getArrayHistoricalAchievements(data){
+
+var historicalAchievements = [];
+
+  for (var i = 0; i < data.length; i++) {
+    if(data[i].order == 0){
+      for (var j = 0; j < data[i].achievements.length; j++) {
+
+
+      if (data[i].achievements[j] != undefined) {
+        historicalAchievements.push(data[i].achievements[j])
+      }
+
+    }
+  }
+
+}
+console.log(historicalAchievements);
 }

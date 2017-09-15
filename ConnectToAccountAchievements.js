@@ -29,7 +29,7 @@
     });
 
     //filter out historical achievements
-    getIDHistorical();
+
 
 
     //filters out the finished achievements
@@ -37,7 +37,7 @@
       var sort_array = [];
 
       $.each(data, function(i, item) {
-        if (!data[i].done) {
+        if (!data[i].done && !$.inArray(data[i].id, historicalAchievements)) {
           var difference = data[i].max - data[i].current
           var temp_array = [difference, data[i].id];
           sort_array.push(temp_array);
