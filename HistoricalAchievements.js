@@ -1,11 +1,11 @@
 function getIdsOfHistoricalAchievements() {
   return new Promise(function(resolve){
     //Collect all category IDS
-    var categoryIdPromise = collectAllCategoryIds();
+    var categoryIdPromise = collectAllHistoricalCategoryIds();
     categoryIdPromise.then(function(categoryIDs) {
       //Collect all historical Category IDS
-      var historicalCategoryIdPromise = collectAllHistoricalCategoryIDS(categoryIDs)
-      historicalCategoryIdPromise.then(function(historicalCatagoryIds) {
+      var categoryDetailsPromise = collectAllCategoryDetails(categoryIDs)
+      categoryDetailsPromise.then(function(historicalCatagoryIds) {
         var historicalAchievementIds = createArrayHistoricalAchievements(historicalCatagoryIds);
         resolve(historicalAchievementIds);
       });
@@ -13,7 +13,7 @@ function getIdsOfHistoricalAchievements() {
   });
 }
 
-function collectAllHistoricalCategoryIDS(categoryIDs) {
+function collectAllCategoryDetails(categoryIDs) {
 
   return new Promise(function(resolve, reject) {
 
@@ -50,11 +50,11 @@ function createArrayHistoricalAchievements(fullCategoryAPIResponse){
   var historicalAchievementIds = [];
 
   for (var i = 0; i < data.length; i++) {
-    if(data[i].order == 0){
+
       for (var j = 0; j < data[i].achievements.length; j++) {
         if (data[i].achievements[j] != undefined) {
           historicalAchievementIds.push(data[i].achievements[j])
-        }
+
       }
     }
 
@@ -63,26 +63,25 @@ function createArrayHistoricalAchievements(fullCategoryAPIResponse){
   return historicalAchievementIds;
 }
 
-function collectAllCategoryIds() {
-  return new Promise(function(resolve, reject) {
-    // do a thing, possibly async, then…
-    $.ajax({
-      headers: {
-        'Accept': 'application/json'
-      },
-      type: "GET",
-      url: "https://api.guildwars2.com/v2/achievements/categories",
-      success: function(data) {
-        var categoryIDs = [];
-        categoryIDs.push(data);
-        resolve(categoryIDs)
-        // REPLACED BY PROMISE ABOVE getAchievementIDHistorical(responseArray)
-      },
-      error: function(err){
-        console.log('error:' + err)
-        reject(err)
-      },
-      dataType: "json"
-    });
+
+function collectAllHistoricalCategoryIds(){
+  return new Promise(function(resolve, reject){
+  $.ajax({
+    headers: {
+      'Accept': 'application/json'
+    },
+    type: "GET",
+    url: "https://api.guildwars2.com/v2/achievements/groups/A9F7378E-9C8A-48CC-9505-3094E661D5F6",
+    success: function(data) {
+      var historicalCategoryIDsNEW = [];
+      historicalCategoryIDsNEW.push(data.categories);
+      resolve(historicalCategoryIDsNEW)
+    },
+    error: function(err){
+      console.log('error:' + err)
+      reject(err)
+    },
+    dataType: "json"
   });
+});
 }
